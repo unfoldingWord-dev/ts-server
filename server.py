@@ -97,7 +97,7 @@ class ResponseHandler(protocol.Protocol):
         try:
             data = json.loads(json_data)
         except ValueError:
-            print "Unexpected error:", sys.exc_info()[0]
+            print("Unexpected error:", sys.exc_info()[0])
             self.sendError('invalid request')
             return
 

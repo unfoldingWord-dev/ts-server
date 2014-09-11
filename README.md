@@ -11,12 +11,12 @@ To test on your local environment you'll need a tool that can communicate with a
 Telnet is available on OSX by default, but you'll need to 
 [manually enable telnet](http://technet.microsoft.com/en-us/library/cc771275(v=ws.10).aspx) it if using Windows 7.
 
->\# connect to the port (you may need to change the port)
->
+connect to the port (you may need to change the port)
+
 >telnet 127.0.0.1 1234
->
->\# send a message
->
+
+send a message
+
 >hello world
 
 ###Usage
@@ -24,10 +24,24 @@ The script expects to receive json data `{'key':'public key', 'udid':'device id'
 where `key` is the public ssh key of the mobile device, `udid` is the unique device id and the optional`usename` is 
 a custom username.
 
-####Responses
-The server will respond with a `1` for success and `0` for errors. All responses are prepended with the api version as well.
+###Responses
+The server will send a json response back to the client which will include the api version and the response type and message.
 
 For example successful communication with the server that is running api version `1.0.0` will look like the following.
->1.0.0:1
+
+>{"version":"1.0.0", "ok":"done"}
+
+Or for an error message
+
+>{"version":"1.0.0", "error":"incomplete request"}
+
+###Configuration
+The server loads a configuration file `config.json` upon startup. A full list of configuration options are described below
+
+* **port** - the port on which the server will listen
+* **key_path**:**user** - the path to which keys will be stored when the client provides a user name
+* **key_path**:**device** - the path to which keys will be stored when the client only provides a udid.
+
+For a complete configuration example see the `sample.config.json` file.
 
 [Twisted]:https://twistedmatrix.com/trac/
