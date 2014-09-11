@@ -44,4 +44,10 @@ The server loads a configuration file `config.json` upon startup. A full list of
 
 For a complete configuration example see the `sample.config.json` file.
 
+
+##Wish List
+Below is a list of features that would be nice to have implemented in the future.
+
+* Log requests to a file on the server
+
 [Twisted]:https://twistedmatrix.com/trac/
