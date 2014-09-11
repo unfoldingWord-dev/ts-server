@@ -33,13 +33,27 @@ def loadConfig(config_path):
         exit()
 
     user_key_path = str(data['key_path']['user'])
-    device_key_path = str(data['key_path']['user'])
+    device_key_path = str(data['key_path']['device'])
     port = str(data['port'])
 
     # validate configuration values
     if user_key_path == "" or device_key_path == "" or port == "":
         print("invalid configuration values")
         exit()
+
+    # make sure directories exist
+    if not os.path.isdir(user_key_path):
+        print('--------------------------------------------------------------')
+        print('Configuration warning:')
+        print('could not locate the user key path please make sure it exists')
+        print('path: '+user_key_path)
+        print('--------------------------------------------------------------\n')
+    if not os.path.isdir(device_key_path):
+        print('--------------------------------------------------------------')
+        print('Configuration warning:')
+        print('could not locate the device key path please make sure it exists')
+        print(device_key_path)
+        print('--------------------------------------------------------------')
 
 class ResponseHandler(protocol.Protocol):
     global user_key_path, device_key_path, api_version
@@ -54,6 +68,29 @@ class ResponseHandler(protocol.Protocol):
         response = '{"version":"'+api_version+'","ok":"'+message+'"}'
         self.transport.write(response)
 
+    # saves the data sent by the client
+    def processData(self, data):
+        if 'username' in data:
+            key_path = user_key_path+'/'+data['username']+'.pub'
+            if os.path.isfile(key_path):
+                with open(key_path) as old_file:
+                    if old_file.read() == data['key']:
+                        # same key
+                        self.sendOk("done")
+                        return
+                    else:
+                        # username already taken
+                        self.sendError("duplicate username")
+                        return
+        else:
+            key_path = device_key_path+'/'+data['udid']+'.pub'
+            # NOTE: device id's will always replace the old key
+
+        f = open(key_path, 'w')
+        f.write(data['key'])
+        f.close()
+        self.sendOk("done")
+
     # handle responses
     def dataReceived(self, json_data):
         # expects {'key':'public key', 'udid':'device id', 'username':'an optional username'}
@@ -67,9 +104,7 @@ class ResponseHandler(protocol.Protocol):
         if 'key' not in data or data['key'] == "" or 'udid' not in data or data['udid'] == "":
             self.sendError('incomplete request')
         else:
-            print('key\n'+data['key']+'\n\nudid\n'+data['udid']+'\n\n')
-            # TODO: process key and UUID
-            self.sendOk('done')
+            self.processData(data)
 
 class ResponseFactory(protocol.Factory):
     def buildProtocol(self, addr):
