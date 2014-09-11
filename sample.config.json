@@ -2,5 +2,6 @@
     "key_path": {
         "user":"/home/gitolite-admin/keydir/door43/",
         "device":"/home/gitolite-admin/keydir/ts/"
-    }
+    },
+    "port":"1234"
 }
