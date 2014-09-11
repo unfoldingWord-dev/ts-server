@@ -1,6 +1,6 @@
 {
-    'key_path': {
-        'user':'/home/gitolite-admin/keydir/door43/',
-        'device':'/home/gitolite-admin/keydir/ts/'
+    "key_path": {
+        "user":"/home/gitolite-admin/keydir/door43/",
+        "device":"/home/gitolite-admin/keydir/ts/"
     }
 }
