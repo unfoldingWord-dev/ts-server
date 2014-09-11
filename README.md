@@ -10,6 +10,8 @@ The server script uses the [Twisted] library to create a web service that handle
 To test on your local environment you'll need a tool that can communicate with a tcp port such as telnet.
 Telnet is available on OSX by default, but you'll need to 
 [manually enable telnet](http://technet.microsoft.com/en-us/library/cc771275(v=ws.10).aspx) it if using Windows 7.
+Also, if you are using a windows environment make sure you install *all* of the dependencies. The laziest way to do that
+is to try running the script and then installing whatever it tells you it's missing.
 
 connect to the port (you may need to change the port)
 
