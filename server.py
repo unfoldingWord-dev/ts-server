@@ -1,12 +1,19 @@
+import logging
 from twisted.internet import protocol, reactor, endpoints
 
-class Echo(protocol.Protocol):
+class ResponseHandler(protocol.Protocol):
+    # response types
+    responses = {'ok':'1', 'error':'0'}
+
+    # handle responses
     def dataReceived(self, data):
-        self.transport.write(data)
+        # receive public key
+        print(data)
+        self.transport.write(self.responses['ok'])
 
-class EchoFactory(protocol.Factory):
+class ResponseFactory(protocol.Factory):
     def buildProtocol(self, addr):
-        return Echo()
+        return ResponseHandler()
 
-endpoints.serverFromString(reactor, "tcp:1234").listen(EchoFactory())
+endpoints.serverFromString(reactor, "tcp:1234").listen(ResponseFactory())
 reactor.run()
