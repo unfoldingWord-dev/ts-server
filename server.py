@@ -112,7 +112,7 @@ class ResponseFactory(protocol.Factory):
     def buildProtocol(self, addr):
         return ResponseHandler()
 
-loadConfig("config.json")
+loadConfig('{0}/config.json'.format(sys.argv[0].rsplit('/', 1)[0]))
 
 print('--------------------------')
 print('Translation Studio Server')
