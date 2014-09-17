@@ -21,6 +21,10 @@ send a message
 
 >hello world
 
+To test from Linux or MAC, you can use telnet, as above, or you can send a full test request with netcat like this:
+
+>cat sample_request.json | nc 127.0.0.1 1234
+
 ###Usage
 The script expects to receive json data `{'key':'public key', 'udid':'device id', 'username':'an optional username'}`  
 where `key` is the public ssh key of the mobile device, `udid` is the unique device id and the optional`usename` is 
