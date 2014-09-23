@@ -1,10 +1,24 @@
 #!/usr/bin/env python
 
-import logging
 import sys
-from twisted.internet import protocol, reactor, endpoints
 import json
 import os.path
+import logging
+from twisted.internet import protocol, reactor, endpoints
+sys.path.append('/var/www/vhosts/door43.org/tools/general_tools')
+try:
+    from git_wrapper import *
+except:
+    print "Please verify that"
+    print "/var/www/vhosts/door43.org/tools/general_tools exists."
+    sys.exit(1)
+try:
+    from github import Github
+    from github import GithubException
+except:
+    print "Please install PyGithub with pip"
+    sys.exit(1)
+
 
 # global variables
 api_version = "1.0.0"
@@ -72,6 +86,7 @@ class ResponseHandler(protocol.Protocol):
 
     # saves the data sent by the client
     def processData(self, data):
+        gitPull(device_key_path)
         if 'username' in data:
             key_path = user_key_path+'/'+data['username']+'.pub'
             if os.path.isfile(key_path):
@@ -91,6 +106,8 @@ class ResponseHandler(protocol.Protocol):
         f = open(key_path, 'w')
         f.write(data['key'])
         f.close()
+        gitCommit(device_key_path, 'Auto add tS app public key')
+        gitPush(device_key_path)
         self.sendOk("done")
 
     # handle responses
